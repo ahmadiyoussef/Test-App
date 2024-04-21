@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
             composable("greeting/{username}") { backStackEntry ->
                 val username = backStackEntry.arguments?.getString("username") ?: "User"
                 Column {
-                    BackButton(navController)  // Back button at the top
+                    BackButton(navController)
                     MedicineListScreen(username) { medicine ->
                         navController.navigate("medicine/${medicine.name}/${medicine.dose}/${medicine.strength}")
                     }
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                 val strength = backStackEntry.arguments?.getString("strength") ?: "Unknown"
 
                 Column {
-                    BackButton(navController)  // Back button for the medicine detail screen
+                    BackButton(navController)
                     MedicineDetailScreen(medicineName, dose, strength)
                 }
             }

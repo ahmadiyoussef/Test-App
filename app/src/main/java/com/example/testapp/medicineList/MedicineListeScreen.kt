@@ -97,12 +97,12 @@ fun MedicineList(viewModel: MedicineViewModel, onMedicineClick: (Medicine) -> Un
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(8.dp))  // Space between name and dose
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Dose: ${medicine.dose}",
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    Spacer(modifier = Modifier.height(8.dp))  // Space between dose and strength
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Strength: ${medicine.strength}",
                         style = MaterialTheme.typography.bodyMedium
