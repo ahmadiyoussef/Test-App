@@ -5,7 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import com.example.testapp.login.LoginScreen
 import com.example.testapp.medicineDetail.MedicineDetailScreen
@@ -41,8 +48,11 @@ class MainActivity : ComponentActivity() {
 
             composable("greeting/{username}") { backStackEntry ->
                 val username = backStackEntry.arguments?.getString("username") ?: "User"
-                MedicineListScreen(username) { medicine ->
-                    navController.navigate("medicine/${medicine.name}/${medicine.dose}/${medicine.strength}")
+                Column {
+                    BackButton(navController)  // Back button at the top
+                    MedicineListScreen(username) { medicine ->
+                        navController.navigate("medicine/${medicine.name}/${medicine.dose}/${medicine.strength}")
+                    }
                 }
             }
 
@@ -51,8 +61,23 @@ class MainActivity : ComponentActivity() {
                 val dose = backStackEntry.arguments?.getString("dose") ?: "Unknown"
                 val strength = backStackEntry.arguments?.getString("strength") ?: "Unknown"
 
-                MedicineDetailScreen(medicineName, dose, strength)
+                Column {
+                    BackButton(navController)  // Back button for the medicine detail screen
+                    MedicineDetailScreen(medicineName, dose, strength)
+                }
             }
+        }
+    }
+
+
+    @Composable
+    fun BackButton(navController: NavController) {
+        IconButton(onClick = { navController.popBackStack() }) {
+            Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.Black
+            )
         }
     }
 
