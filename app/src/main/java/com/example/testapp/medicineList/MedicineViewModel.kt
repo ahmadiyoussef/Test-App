@@ -26,7 +26,7 @@ class MedicineViewModel @Inject constructor(
             val result = repository.getMedicineList()
             when (result) {
                 is Resource.Success -> {
-                    medicines.value = result.data
+                    medicines.value = result.data!!.medicines!!
                 }
 
                 is Resource.Error -> {
