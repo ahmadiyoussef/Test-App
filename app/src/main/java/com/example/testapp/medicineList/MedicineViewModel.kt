@@ -18,27 +18,10 @@ class MedicineViewModel @Inject constructor(
 ) : ViewModel() {
 
     val medicines = MutableLiveData<List<Medicine>>()
-    var loadError = mutableStateOf("")
-    var isLoading = mutableStateOf(false)
 
     init {
         viewModelScope.launch {
-            val result = repository.getMedicineList()
-            when (result) {
-                is Resource.Success -> {
-                    medicines.value = result.data!!.medicines!!
-                }
-
-                is Resource.Error -> {
-                    loadError.value = result.message!!
-                    isLoading.value = false
-                }
-
-                else -> {
-
-                }
-            }
-
+             medicines.value = repository.getMedicineList()
         }
     }
 }

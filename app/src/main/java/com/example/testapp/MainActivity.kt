@@ -42,7 +42,9 @@ class MainActivity : ComponentActivity() {
         NavHost(navController, startDestination = "login_screen") {
             composable("login_screen") {
                 LoginScreen { username ->
-                    navController.navigate("greeting/$username")
+                    if (username.isNotEmpty()) {
+                        navController.navigate("greeting/$username")
+                    }
                 }
             }
 

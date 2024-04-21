@@ -2,7 +2,9 @@ package com.example.testapp.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.testapp.data.local.MedicineDao
 import com.example.testapp.data.local.MedicineDatabase
+import com.example.testapp.data.local.MedicineLocalDataSource
 import com.example.testapp.data.remote.MedicineApi
 import com.example.testapp.repository.MedicineRepository
 import com.example.testapp.utils.Constants.BASE_URL
@@ -23,8 +25,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMedicineRepository(
+        localDataSource: MedicineLocalDataSource,
         api: MedicineApi
-    ) = MedicineRepository(api)
+
+    ) = MedicineRepository(localDataSource, api)
 
     @Singleton
     @Provides
@@ -38,6 +42,7 @@ object AppModule {
 
 
     @Provides
+    @Singleton
     fun provideMedicineDatabase(@ApplicationContext context: Context): MedicineDatabase {
         return Room.databaseBuilder(
             context,
@@ -45,4 +50,16 @@ object AppModule {
             "medicine-db"
         ).build()
     }
+
+    @Provides
+    fun providesMedicineDao(db: MedicineDatabase): MedicineDao {
+        return db.medicineDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideMedicineLocalDataSource(
+        medicineDao: MedicineDao
+    ) = MedicineLocalDataSource(medicineDao)
+
 }

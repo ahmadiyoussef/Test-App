@@ -1,22 +1,24 @@
 package com.example.testapp.repository
 
+import com.example.testapp.data.local.MedicineDao
+import com.example.testapp.data.local.MedicineLocalDataSource
 import com.example.testapp.data.models.Medicine
-import com.example.testapp.data.models.Problems
 import com.example.testapp.data.remote.MedicineApi
 import com.example.testapp.utils.Resource
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 @ActivityScoped
 class MedicineRepository @Inject constructor(
-    private val api : MedicineApi
+    private val localDataSource: MedicineLocalDataSource,
+    private val api: MedicineApi
 ) {
+    suspend fun getMedicineList(): List<Medicine>{
+        val localMedicines = localDataSource.getMedicineList()
+        if (localMedicines.isNotEmpty()) return localMedicines
 
-    suspend fun getMedicineList(): Resource<Problems> {
-        val response = try {
-            api.getMedicines()
-        } catch(e: Exception) {
-            return Resource.Error("An unknown error occured.")
-        }
-        return Resource.Success(response)
+        val remoteMedicines = api.getMedicines()
+        localDataSource.saveMedicines(remoteMedicines.medicines)
+
+        return localDataSource.getMedicineList()
     }
 }
